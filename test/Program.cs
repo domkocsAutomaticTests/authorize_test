@@ -7,12 +7,14 @@ namespace test
 {
     class Program
     {
+        private static int min = 100001;
+        private static int max = 100006;
         static void Main(string[] args)
         {
             IWebDriver driver = new FirefoxDriver();
             bool letezik = false;
             int hiba = 0;
-            for (int i = 100001; i <= 100006; i++)
+            for (int i = min; i <= max; i++)
             {
 
                 Console.Write("[Státusz] ");
@@ -31,7 +33,9 @@ namespace test
                 }
                 catch
                 {
-                    Console.WriteLine("Sikertelen bejelentkezés!");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Sikertelen bejelentkezés {0} felhasználóval!", i);
+                    break;
                 }
                 try
                 {
@@ -55,15 +59,23 @@ namespace test
                 try
                 {
                     driver.FindElement(By.Id("actionButton_Authorize")).Click();
-                
+                    driver.FindElement(By.Id("actionButton_fakeExecute")).Click(); Thread.Sleep(1000);
+
                     Thread.Sleep(2000);
-                    if (driver.FindElement(By.ClassName("form-title")).Text == "CONFIRM: AUTHORIZE")
+                    try
+                    {
+                        if (driver.FindElement(By.ClassName("alertMessage")).Text != "")
+                        {
+                            letezik = false;
+                        }
+                        else
+                        {
+                            letezik = true;
+                        }
+                    }
+                    catch
                     {
                         letezik = true;
-                    }
-                    else
-                    {
-                        letezik = false;
                     }
                     if (letezik == true)
                     {
@@ -100,6 +112,7 @@ namespace test
             }
             Console.Write("[Státusz] ");
             Console.WriteLine("Teszt vége");
+            Console.WriteLine("Üss le egy billentyűt a kilépéshez...");
             Console.ReadKey();
         }
     }
