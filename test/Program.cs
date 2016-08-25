@@ -9,6 +9,7 @@ namespace test
     {
         private static int min = 100001;
         private static int max = 100006;
+        private static int kivetel = 100001;
         static void Main(string[] args)
         {
             IWebDriver driver = new FirefoxDriver();
@@ -16,7 +17,6 @@ namespace test
             int hiba = 0;
             for (int i = min; i <= max; i++)
             {
-
                 Console.Write("[Státusz] ");
                 Console.WriteLine("Bejelentkezés {0} felhasználóba...", i);
                 driver.Navigate().GoToUrl("https://clicpltest.egroup.hu/Login/LoginWithRSADemo");
@@ -60,7 +60,6 @@ namespace test
                 {
                     driver.FindElement(By.Id("actionButton_Authorize")).Click();
                     driver.FindElement(By.Id("actionButton_fakeExecute")).Click(); Thread.Sleep(1000);
-
                     Thread.Sleep(2000);
                     try
                     {
@@ -77,12 +76,19 @@ namespace test
                     {
                         letezik = true;
                     }
-                    if (letezik == true)
+                    if (letezik == true && i == kivetel)
                     {
                         //tud authorizálni
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Sikerült!");
                         hiba++;
+                        Console.WriteLine("Sikerült!");
+                        Console.ResetColor();
+                    }
+                    else if (letezik == true && i != kivetel)
+                    {
+                        //tud authorizálni
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Sikerült!");
                         Console.ResetColor();
                     }
                     else
